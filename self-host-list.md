@@ -1,4 +1,19 @@
-# https://rxresu.me/
+# password checker
+
+https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_and_Commands__lIFZJ6H_SnaVIpwtIlKNlg
+image in docker hub : **ahmedfnx/pass-check**
+
+---
+
+# certificate generation
+https://github.com/semikolan-co/Certificate-Generator
+
+https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_for_Certifications-gen__TVcBdYNxQsKxBsS-k_Eiyg
+image in docker hub : **ahmedfnx/fnx-cert-gen**
+
+---
+
+# https://rxresu.me
 
 documentations with images: 
 https://scribehow.com/shared/Create_Stack_resume_via_Web_Interface__JSkZB87KRaWofTAXtUnyvA
@@ -62,10 +77,8 @@ volumes:
 ```
 
 
------------------------------------------------------
 
 
-https://github.com/semikolan-co/Certificate-Generator
 
 https://gethomepage.dev/latest/installation/docker/
   
