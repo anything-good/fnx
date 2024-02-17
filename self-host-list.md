@@ -16,6 +16,6 @@ https://akaunting.com/
 
 https://affine.pro/
 
-https://www.pancakeapp.com/
+# https://www.pancakeapp.com/
 
 https://github.com/Briuor/wbm?tab=readme-ov-file
