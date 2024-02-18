@@ -85,6 +85,13 @@ Step 1 & 2. step1
 Step 3. step 2
 ![220198843-8be34f58-f7dd-465d-b59a-7e9b4764ffc0](https://github.com/anything-good/fnx/assets/90029363/4dbd6c9a-b290-4764-92df-b847ec2d3c5f)
 
+
+* https://github.com/rpgeeganage/ots-share-app.git
+
+* refs/heads/main
+
+* docker-compose.bundle.yml
+
 Press Deploy the stack to deploy.
 
 ---
