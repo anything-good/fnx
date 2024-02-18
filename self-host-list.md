@@ -1,11 +1,11 @@
-# password checker
+## password checker
 
 https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_and_Commands__lIFZJ6H_SnaVIpwtIlKNlg
 image in docker hub : **ahmedfnx/pass-check**
 
 ---
 
-# certificate generation
+## certificate generation
 https://github.com/semikolan-co/Certificate-Generator
 
 https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_for_Certifications-gen__TVcBdYNxQsKxBsS-k_Eiyg
@@ -13,7 +13,7 @@ image in docker hub : **ahmedfnx/fnx-cert-gen**
 
 ---
 
-# https://rxresu.me
+## https://rxresu.me
 
 documentations with images: 
 https://scribehow.com/shared/Create_Stack_resume_via_Web_Interface__JSkZB87KRaWofTAXtUnyvA
@@ -77,7 +77,7 @@ volumes:
 ```
 
 
-# one time sescret sharing app :
+## one time sescret sharing app :
 
 Step 1 & 2. step1
 ![220198712-7d379d69-3fdb-430a-93f6-c02c0d6b4ae9](https://github.com/anything-good/fnx/assets/90029363/20664846-04f7-4b14-976a-1abeca41e870)
@@ -96,9 +96,79 @@ Press Deploy the stack to deploy.
 
 ---
 
-https://gethomepage.dev/latest/installation/docker/
+## https://gethomepage.dev/latest/installation/docker/
+
+```
+version: "3.3"
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000
+    volumes:
+      - /path/to/config:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+```
   
-https://github.com/738/awesome-url-shortener
+## url shortener :
+create a new portainer stack with the following file (use docker compose) :
+```
+version: '3.8'
+
+services:
+  my_shlink:
+    container_name: my_shlink
+    image: shlinkio/shlink:stable
+    ports:
+      - "8080:8080"
+    environment:
+      DEFAULT_DOMAIN: s.test
+      IS_HTTPS_ENABLED: "true"
+      GEOLITE_LICENSE_KEY: kjh23ljkbndskj345
+
+```
+
+## Cyper Chef  https://github.com/gchq/CyberChef:
+
+image link : **not in dockerhub : ghcr.io/gchq/cyberchef:latest**
+
+```
+version: '3.8'
+
+services:
+  cyberchef:
+    image: ghcr.io/gchq/cyberchef:latest
+    ports:
+      - "8080:80"
+```
+
+---
+
+## https://github.com/recurser/string-is : 
+
+docker image name : daveperrett/string-is
+
+---
+
+## penpot designtool :
+
+docker compose file link (it is quit a long one) :
+```https://raw.githubusercontent.com/penpot/penpot/main/docker/images/docker-compose.yaml```
+
+---
+
+## workout and nutrition web app :
+
+docker compose file link (also a long file) :
+```https://github.com/wger-project/docker/raw/master/docker-compose.yml```
+
+---
+## 2FAuth : 
+docker compose file link (also a long file) :
+```https://github.com/Bubka/2FAuth/raw/master/docker/docker-compose.yml```
+
+---
 
 https://alf.io/
 
