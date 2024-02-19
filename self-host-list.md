@@ -110,24 +110,6 @@ services:
       - /path/to/config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
 ```
-  
-## url shortener :
-create a new portainer stack with the following file (use docker compose) :
-```
-version: '3.8'
-
-services:
-  my_shlink:
-    container_name: my_shlink
-    image: shlinkio/shlink:stable
-    ports:
-      - "8080:8080"
-    environment:
-      DEFAULT_DOMAIN: s.test
-      IS_HTTPS_ENABLED: "true"
-      GEOLITE_LICENSE_KEY: kjh23ljkbndskj345
-
-```
 
 ## Cyper Chef  https://github.com/gchq/CyberChef:
 
@@ -170,17 +152,53 @@ docker compose file link (also a long file) :
 
 ---
 
-https://alf.io/
 
-https://particify.de/en/
+## openproject : 
+docker compose file link (also a long file) :
+```https://github.com/opf/openproject-deploy/raw/stable/13/compose/docker-compose.yml```
 
-https://shlink.io/
+---
 
-https://www.wiz.cn/docker
+## https://alf.io (ticket reservation system):
+docker compose file link  :
+```https://github.com/alfio-event/alf.io/raw/main/docker-compose.yml```
 
-https://akaunting.com/
+---
+
+
+## intractive quiz maker : 
+docker compose file link  :
+```https://github.com/mawoka-myblock/ClassQuiz/raw/master/docker-compose.yml```
+
+---
+
+## https://www.wiz.cn/docker :
+
+```https://github.com/containrrr/watchtower/raw/main/docker-compose.yml```
+
+---
+
+https://akaunting.com/ :
+
+docker image name : ```akaunting/akaunting```
+just add the above container into docker .
+
+---
+
 
 https://affine.pro/
+
+```
+version: '3.8'
+
+services:
+  affine:
+    image: ghcr.io/toeverything/affine-self-hosted:latest
+    container_name: affine
+    ports:
+      - "3000:3000"
+
+```
 
 
 https://github.com/Briuor/wbm?tab=readme-ov-file
