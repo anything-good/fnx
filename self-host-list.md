@@ -140,12 +140,7 @@ docker compose file link (it is quit a long one) :
 
 ---
 
-## workout and nutrition web app :
 
-docker compose file link (also a long file) :
-```https://github.com/wger-project/docker/raw/master/docker-compose.yml```
-
----
 ## 2FAuth : 
 docker compose file link (also a long file) :
 ```https://github.com/Bubka/2FAuth/raw/master/docker/docker-compose.yml```
