@@ -1,7 +1,7 @@
 ## password checker
 
 https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_and_Commands__lIFZJ6H_SnaVIpwtIlKNlg
-image in docker hub : **ahmedfnx/pass-check**
+image in docker hub : ahmedfnx/pass-check
 
 ---
 
@@ -9,7 +9,7 @@ image in docker hub : **ahmedfnx/pass-check**
 https://github.com/semikolan-co/Certificate-Generator
 
 https://scribehow.com/shared/Create_Docker_Container_with_Port_Mapping_for_Certifications-gen__TVcBdYNxQsKxBsS-k_Eiyg
-image in docker hub : **ahmedfnx/fnx-cert-gen**
+image in docker hub : ahmedfnx/fnx-cert-gen
 
 ---
 
@@ -20,7 +20,6 @@ https://scribehow.com/shared/Create_Stack_resume_via_Web_Interface__JSkZB87KRaWo
 
 create a new portainer stack with the following file (use docker compose) :
 
-```
 version: "3.8"
 
 services:
@@ -74,7 +73,7 @@ services:
       
 volumes:
   pgdata:
-```
+
 
 
 ## one time sescret sharing app :
@@ -98,32 +97,30 @@ Press Deploy the stack to deploy.
 
 ## https://gethomepage.dev/latest/installation/docker/
 
-```
 version: "3.3"
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     ports:
-      - 3000:3000
+      - 30:3000
     volumes:
       - /path/to/config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
-```
+
 
 ## Cyper Chef  https://github.com/gchq/CyberChef:
 
-image link : **not in dockerhub : ghcr.io/gchq/cyberchef:latest**
+image link : not in dockerhub : ghcr.io/gchq/cyberchef:latest
 
-```
 version: '3.8'
 
 services:
   cyberchef:
     image: ghcr.io/gchq/cyberchef:latest
     ports:
-      - "8080:80"
-```
+      - "8580:80"
+
 
 ---
 
@@ -133,68 +130,41 @@ docker image name : daveperrett/string-is
 
 ---
 
-## penpot designtool :
-
-docker compose file link (it is quit a long one) :
-```https://raw.githubusercontent.com/penpot/penpot/main/docker/images/docker-compose.yaml```
-
----
-
-
-## 2FAuth : 
-docker compose file link (also a long file) :
-```https://github.com/Bubka/2FAuth/raw/master/docker/docker-compose.yml```
-
----
-
 
 ## openproject : 
-docker compose file link (also a long file) :
-```https://github.com/opf/openproject-deploy/raw/stable/13/compose/docker-compose.yml```
-
----
-
-## https://alf.io (ticket reservation system):
-docker compose file link  :
-```https://github.com/alfio-event/alf.io/raw/main/docker-compose.yml```
-
----
+First, you must clone the  [openproject-deploy](https://github.com/opf/openproject-deploy/tree/stable/13/compose)  repository:
 
 
-## intractive quiz maker : 
-docker compose file link  :
-```https://github.com/mawoka-myblock/ClassQuiz/raw/master/docker-compose.yml```
+git clone https://github.com/opf/openproject-deploy --depth=1 --branch=stable/13 openproject
 
----
+Then, change into the compose folder, this folder will be the location where you enter all following commands:
 
-## https://www.wiz.cn/docker :
-docker compose file link  :
+cd openproject/compose
+Make sure you are using the latest version of the Docker images:
 
-```https://github.com/containrrr/watchtower/raw/main/docker-compose.yml```
-
----
-
-https://akaunting.com/ :
-
-docker image name : ```akaunting/akaunting```
-just add the above container into docker .
-
----
+docker-compose pull
+Launch the containers:
+OPENPROJECT_HTTPS=false docker-compose up -d
 
 
-https://affine.pro/
-
-```
-version: '3.8'
-
-services:
-  affine:
-    image: ghcr.io/toeverything/affine-self-hosted:latest
-    container_name: affine
-    ports:
-      - "3000:3000"
-
-```
+After a while, OpenProject should be up and running on  http://localhost:8080.
 
 
-https://github.com/Briuor/wbm?tab=readme-ov-file
+
+
+ ## [https://www.wiz.cn/docker](https://www.wiz.cn/docker)  :
+
+1.  Run this command in Terminal to create a data folder
+
+cd ~
+mkdir wizdata
+
+
+Create a folder wizdata for preserving all the data of WizNote Server. Please backup this folder regularly. If you want to use NAS or private cloud as data storage, please contact us.
+
+
+2.  Run the command below to run the docker container
+docker run --name wiz -it -d -v ~/wizdata:/wiz/storage -v /etc/localtime:/etc/localtime -p 80:80 -p 9269:9269/udp wiznote/wizserver
+
+## class quiz maker
+https://classquiz.de/docs/self-host
