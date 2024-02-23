@@ -147,9 +147,7 @@ Launch the containers:
 OPENPROJECT_HTTPS=false docker-compose up -d
 
 
-After a while, OpenProject should be up and running on  http://localhost:8080.
-
-
+After a while, OpenProject should be up and running on http://localhost:8080. The default username and password is login: admin, and password: admin. You need to explicitly disable HTTPS mode on startup as OpenProject assumes it’s running behind HTTPS in production by default.
 
 
  ## [https://www.wiz.cn/docker](https://www.wiz.cn/docker)  :
