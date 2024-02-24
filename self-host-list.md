@@ -19,7 +19,7 @@ documentations with images:
 https://scribehow.com/shared/Create_Stack_resume_via_Web_Interface__JSkZB87KRaWofTAXtUnyvA
 
 create a new portainer stack with the following file (use docker compose) :
-
+```
 version: "3.8"
 
 services:
@@ -74,7 +74,7 @@ services:
 volumes:
   pgdata:
 
-
+```
 
 ## one time sescret sharing app :
 
@@ -96,7 +96,7 @@ Press Deploy the stack to deploy.
 ---
 
 ## https://gethomepage.dev/latest/installation/docker/
-
+```
 version: "3.3"
 services:
   homepage:
@@ -108,11 +108,12 @@ services:
       - /path/to/config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
 
+```
 
 ## Cyper Chef  https://github.com/gchq/CyberChef:
 
 image link : not in dockerhub : ghcr.io/gchq/cyberchef:latest
-
+```
 version: '3.8'
 
 services:
@@ -120,7 +121,7 @@ services:
     image: ghcr.io/gchq/cyberchef:latest
     ports:
       - "8580:80"
-
+```
 
 ---
 
@@ -134,35 +135,141 @@ docker image name : daveperrett/string-is
 ## openproject : 
 First, you must clone the  [openproject-deploy](https://github.com/opf/openproject-deploy/tree/stable/13/compose)  repository:
 
-
+```
 git clone https://github.com/opf/openproject-deploy --depth=1 --branch=stable/13 openproject
-
+```
 Then, change into the compose folder, this folder will be the location where you enter all following commands:
-
+```
 cd openproject/compose
+```
 Make sure you are using the latest version of the Docker images:
-
+```
 docker-compose pull
 Launch the containers:
 OPENPROJECT_HTTPS=false docker-compose up -d
+```
 
-
-After a while, OpenProject should be up and running on http://localhost:8080. The default username and password is login: admin, and password: admin. You need to explicitly disable HTTPS mode on startup as OpenProject assumes it’s running behind HTTPS in production by default.
+After a while, OpenProject should be up and running on http://localhost:8080. 
+The default username and password is login: admin, and password: admin. You need to explicitly disable HTTPS mode on startup as OpenProject assumes it’s running behind HTTPS in production by default.
 
 
  ## [https://www.wiz.cn/docker](https://www.wiz.cn/docker)  :
 
 1.  Run this command in Terminal to create a data folder
-
+```
 cd ~
 mkdir wizdata
-
+```
 
 Create a folder wizdata for preserving all the data of WizNote Server. Please backup this folder regularly. If you want to use NAS or private cloud as data storage, please contact us.
 
 
 2.  Run the command below to run the docker container
-docker run --name wiz -it -d -v ~/wizdata:/wiz/storage -v /etc/localtime:/etc/localtime -p 80:80 -p 9269:9269/udp wiznote/wizserver
 
+```
+docker run --name wiz -it -d -v ~/wizdata:/wiz/storage -v /etc/localtime:/etc/localtime -p 80:80 -p 9269:9269/udp wiznote/wizserver
+```
 ## class quiz maker
+follow the instructions in the link :
 https://classquiz.de/docs/self-host
+
+
+## uptime-kuma
+
+```
+version: '3.3'
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:1
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma:/app/data
+    restart: always
+
+volumes:
+  uptime-kuma:
+
+```
+
+## Excalidraw
+
+```
+version: '3.8'
+
+services:
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    ports:
+      - "8670:80"
+    restart: unless-stopped
+
+```
+
+## neonlink (**https://github.com/AlexSciFier/neonlink**)
+
+you shall use docker compose :
+```
+version: "3.8"
+
+services:
+  neonlink:
+    image: alexscifier/neonlink
+    container_name: neonlink
+    # user: 1000:1000 # optional
+    volumes:
+      - ./data:/app/data
+      - ./background:/app/public/static/media/background
+    restart: unless-stopped
+    environment:
+      FASTIFY_PLUGIN_TIMEOUT: 0 # optional: change to 0 if AVV_ERR_READY TIMEOUT error is occured
+    ports:
+      - "8010:3333"
+```
+
+
+## password-pusher
+```
+version: '3.8'
+
+services:
+  pwpush-ephemeral:
+    image: pglombardo/pwpush-ephemeral:release
+    ports:
+      - "5770:5100"
+    restart: unless-stopped
+```
+
+## filegator (file hosting server):
+
+* image name :```filegator/filegator``` .
+* port to be published 8080 .
+*login as admin , pasword: admin123 .
+
+## memories app (memos)
+
+```
+version: "3.0"
+services:
+  memos:
+    image: neosmemo/memos:latest
+    container_name: memos
+    volumes:
+      - ~/.memos/:/var/opt/memos
+    ports:
+      - 5230:5230
+```
+
+## leantime :
+
+```
+git clone https://github.com/Leantime/docker-leantime.git
+cd docker-leantime
+cp sample.env .env
+nano .env    # Change the secrets for security
+docker-compose up -d
+```
+
+
+
