@@ -272,4 +272,39 @@ docker-compose up -d
 ```
 
 
+## screego :
 
+```
+version: "3.7"
+
+services:
+  screego:
+    image: ghcr.io/screego/server:arm64-1
+    ports:
+      - "5050:5050"
+      - "3478:3478"
+      - "50000-50200:50000-50200/udp"
+    environment:
+      SCREEGO_EXTERNAL_IP: "84.235.245.241"
+      SCREEGO_TURN_PORT_RANGE: "50000:50200"
+      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.screego.entrypoints=http"
+      - "traefik.http.routers.screego.rule=Host(`screego.fnx.tools`)"
+      - "traefik.http.middlewares.screego-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.screego.middlewares=screego-https-redirect"
+      - "traefik.http.routers.screego-secure.entrypoints=https"
+      - "traefik.http.routers.screego-secure.rule=Host(`screego.fnx.tools`)"
+      - "traefik.http.routers.screego-secure.tls=true"
+      - "traefik.http.routers.screego-secure.service=screego"
+      - "traefik.http.services.screego.loadbalancer.server.port=3478"
+      - "traefik.docker.network=proxy"
+
+
+networks:
+  proxy:
+    external: true
+
+
+```
