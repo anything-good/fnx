@@ -308,3 +308,272 @@ networks:
 
 
 ```
+
+
+
+### jitsi meet 
+
+https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker
+
+docker compose :
+```
+version: '3'
+
+services:
+    # Frontend
+    jitsi-meet:
+        image: jitsi/web:web-1.0.7874-1@sha256:5f6f4b646fb2c57670bf4463905d5b7fd37538adc4eba108c4afff25f73537db
+        restart: ${RESTART_POLICY}
+        volumes:
+            - ${CONFIG}/web:/config:Z
+            - ${CONFIG}/web/letsencrypt:/etc/letsencrypt:Z
+            - ${CONFIG}/transcripts:/usr/share/jitsi-meet/transcripts:Z
+        environment:
+            - ENABLE_AUTH
+            - ENABLE_GUESTS
+            - ENABLE_LETSENCRYPT
+            - ENABLE_HTTP_REDIRECT
+            - ENABLE_TRANSCRIPTIONS
+            - DISABLE_HTTPS
+            - JICOFO_AUTH_USER
+            - LETSENCRYPT_DOMAIN
+            - LETSENCRYPT_EMAIL
+            - PUBLIC_URL
+            - XMPP_DOMAIN
+            - XMPP_AUTH_DOMAIN
+            - XMPP_BOSH_URL_BASE
+            - XMPP_GUEST_DOMAIN
+            - XMPP_MUC_DOMAIN
+            - XMPP_RECORDER_DOMAIN
+            - ETHERPAD_URL_BASE
+            - ETHERPAD_PUBLIC_URL
+            - TZ
+            - JIBRI_BREWERY_MUC
+            - JIBRI_PENDING_TIMEOUT
+            - JIBRI_XMPP_USER
+            - JIBRI_XMPP_PASSWORD
+            - JIBRI_RECORDER_USER
+            - JIBRI_RECORDER_PASSWORD
+            - ENABLE_RECORDING
+        
+        ports:
+            - '${HTTP_PORT}:80'
+            - '${HTTPS_PORT}:443'
+        networks:
+            proxy:
+            meet.jitsi:
+                aliases:
+                    - ${XMPP_DOMAIN}
+                    
+        # labels:
+        #     - "traefik.enable=true"
+        #     - "traefik.docker.network=proxy"
+        #     ## HTTP Routers
+        #     - "traefik.http.routers.jitsi-meet.entrypoints=https"
+        #     - "traefik.http.routers.jitsi-meet.rule=Host(`$XMPP_DOMAIN`)"
+        #     #HTTPS Routes
+        #     - "traefik.http.routers.jitsi-meet-secure.rule=Host(`jitsi-meet.fnx.tools`)"
+
+        #     ## Middlewares
+        #     - "traefik.http.routers.jitsi-meet.middlewares=chain-jitsi-auth@file"
+        #     ## HTTP Services
+        #     - "traefik.http.services.jitsi-meet.loadbalancer.server.port=80"
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.jitsi-meet.entrypoints=http"
+          - "traefik.http.routers.jitsi-meet.rule=Host(`jitsi-meet.fnx.tools`)"
+          - "traefik.http.middlewares.jitsi-meet-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.jitsi-meet.middlewares=jitsi-meet-https-redirect"
+          - "traefik.http.routers.jitsi-meet-secure.entrypoints=https"
+          - "traefik.http.routers.jitsi-meet-secure.rule=Host(`jitsi-meet.fnx.tools`)"
+          - "traefik.http.routers.jitsi-meet-secure.tls=true"
+          - "traefik.http.routers.jitsi-meet-secure.service=jitsi-meet"
+          - "traefik.http.services.jitsi-meet.loadbalancer.server.port=80"
+          - "traefik.docker.network=proxy"
+    
+
+    # XMPP server
+    prosody:
+        image: jitsi/prosody:prosody-0.12.4@sha256:3992343768afb32028a1999c337f12b9f413bbd531b33669d0e3916fd1d29d0a
+        restart: ${RESTART_POLICY}
+        expose:
+            - '5222'
+            - '5347'
+            - '5280'
+        volumes:
+            - ${CONFIG}/prosody/config:/config:Z
+            - ${CONFIG}/prosody/prosody-plugins-custom:/prosody-plugins-custom:Z
+
+        labels:
+            - "traefik.enable=true"
+            ## HTTP Routers
+            - "traefik.http.routers.jitsi-prosody-ws.entrypoints=https"
+            - "traefik.http.routers.jitsi-prosody-ws.rule=Host(`$XMPP_DOMAIN`) && Path(`/xmpp-websocket`)"
+            ## Middlewares
+            - "traefik.http.routers.jitsi-prosody-ws.middlewares=chain-jitsi-auth@file"
+            ## HTTP Services
+            - "traefik.http.services.jitsi-prosody-ws.loadbalancer.server.port=5280"
+
+        
+        environment:
+            - AUTH_TYPE
+            - ENABLE_AUTH
+            - ENABLE_GUESTS
+            - GLOBAL_MODULES
+            - GLOBAL_CONFIG
+            - LDAP_URL
+            - LDAP_BASE
+            - LDAP_BINDDN
+            - LDAP_BINDPW
+            - LDAP_FILTER
+            - LDAP_AUTH_METHOD
+            - LDAP_VERSION
+            - LDAP_USE_TLS
+            - LDAP_TLS_CIPHERS
+            - LDAP_TLS_CHECK_PEER
+            - LDAP_TLS_CACERT_FILE
+            - LDAP_TLS_CACERT_DIR
+            - LDAP_START_TLS
+            - XMPP_DOMAIN
+            - XMPP_AUTH_DOMAIN
+            - XMPP_GUEST_DOMAIN
+            - XMPP_MUC_DOMAIN
+            - XMPP_INTERNAL_MUC_DOMAIN
+            - XMPP_MODULES
+            - XMPP_MUC_MODULES
+            - XMPP_INTERNAL_MUC_MODULES
+            - XMPP_RECORDER_DOMAIN
+            - JICOFO_COMPONENT_SECRET
+            - JICOFO_AUTH_USER
+            - JICOFO_AUTH_PASSWORD
+            - JVB_AUTH_USER
+            - JVB_AUTH_PASSWORD
+            - JIGASI_XMPP_USER
+            - JIGASI_XMPP_PASSWORD
+            - JIBRI_XMPP_USER
+            - JIBRI_XMPP_PASSWORD
+            - JIBRI_RECORDER_USER
+            - JIBRI_RECORDER_PASSWORD
+            - JWT_APP_ID
+            - JWT_APP_SECRET
+            - JWT_ACCEPTED_ISSUERS
+            - JWT_ACCEPTED_AUDIENCES
+            - JWT_ASAP_KEYSERVER
+            - JWT_ALLOW_EMPTY
+            - JWT_AUTH_TYPE
+            - JWT_TOKEN_AUTH_MODULE
+            - LOG_LEVEL
+            - TZ
+        networks:
+            meet.jitsi:
+                aliases:
+                    - ${XMPP_SERVER}
+
+    # Focus component
+    jicofo:
+        image: jitsi/jicofo:jicofo-1.0-1075-1@sha256:633679bb7f7aaf0217228f1800269cca23bce87b127d259dfa2743a412e2a670
+        restart: ${RESTART_POLICY}
+        volumes:
+            - ${CONFIG}/jicofo:/config:Z
+        environment:
+            - AUTH_TYPE
+            - ENABLE_AUTH
+            - XMPP_DOMAIN
+            - XMPP_AUTH_DOMAIN
+            - XMPP_INTERNAL_MUC_DOMAIN
+            - XMPP_SERVER
+            - JICOFO_COMPONENT_SECRET
+            - JICOFO_AUTH_USER
+            - JICOFO_AUTH_PASSWORD
+            - JICOFO_RESERVATION_REST_BASE_URL
+            - JVB_BREWERY_MUC
+            - JIGASI_BREWERY_MUC
+            - JIBRI_BREWERY_MUC
+            - JIGASI_SIP_URI
+            - JIBRI_PENDING_TIMEOUT
+            - TZ
+        depends_on:
+            - prosody
+        networks:
+            meet.jitsi:
+
+    # Video bridge
+    jvb:
+        image: jitsi/jvb:jvb-2.3-92-g64f9f34f-1@sha256:869e85bf88f75a39a83ed78c8cce7969d83f8dedf860f01e4c46f01f6f92fb55
+        restart: ${RESTART_POLICY}
+        ports:
+            - "${JVB_PORT}:${JVB_PORT}"
+            - "${JVB_TCP_MAPPED_PORT}:${JVB_TCP_PORT}"
+        
+        labels:
+            - "traefik.enable=true"
+            ## HTTP Routers
+            - "traefik.http.routers.jitsi-colibri-ws.entrypoints=https"
+            - "traefik.http.routers.jitsi-colibri-ws.rule=Host(`$XMPP_DOMAIN`) && PathPrefix(`/colibri-ws`)"
+            ## Middlewares
+            - "traefik.http.routers.jitsi-colibri-ws.middlewares=chain-jitsi-auth@file"
+            ## HTTP Services
+            - "traefik.http.services.jitsi-colibri-ws.loadbalancer.server.port=9090"
+        volumes:
+            - ${CONFIG}/jvb:/config:Z
+        environment:
+            - DOCKER_HOST_ADDRESS
+            - XMPP_AUTH_DOMAIN
+            - XMPP_INTERNAL_MUC_DOMAIN
+            - XMPP_SERVER
+            - JVB_AUTH_USER
+            - JVB_AUTH_PASSWORD
+            - JVB_BREWERY_MUC
+            - JVB_PORT
+            - JVB_TCP_HARVESTER_DISABLED
+            - JVB_TCP_PORT
+            - JVB_STUN_SERVERS
+            - JVB_ENABLE_APIS
+            - COLIBRI_REST_ENABLED
+            - SHUTDOWN_REST_ENABLED
+            - TZ
+        depends_on:
+            - prosody
+        networks:
+            meet.jitsi:
+
+# Custom network so all services can communicate using a FQDN
+networks:
+    meet.jitsi:
+    # traefik: change the following line to your external docker network 
+    proxy:
+        external: true
+
+```
+
+.env :
+```
+# .env
+
+# Basic configuration options
+CONFIG=~/.jitsi-meet-cfg
+HTTP_PORT=8084
+HTTPS_PORT=8443
+TZ=UTC
+XMPP_DOMAIN=jitsi-meet.fnx.tools
+PUBLIC_URL=https://jitsi-meet.fnx.tools
+LETSENCRYPT_DOMAIN=https://jitsi-meet.fnx.tools
+JVB_TCP_PORT=9090
+JVB_PORT=7790
+JVB_TCP_MAPPED_PORT=7090
+DOCKER_HOST_ADDRESS=84.235.245.241
+RESTART_POLICY=always
+
+# Authentication configuration
+ENABLE_AUTH=1
+ENABLE_GUESTS=1
+AUTH_TYPE=internal
+
+# Security
+JICOFO_AUTH_PASSWORD=08b93c13f397b02c3f5e22676a1e3846
+JVB_AUTH_PASSWORD=2cb9005896b81d9f0857b86162486644
+JIGASI_XMPP_PASSWORD=5cb436ab841f5ef0503c4620c5fedf47
+JIBRI_RECORDER_PASSWORD=8f24152b343c05df0acb39643e8ee59c
+JIBRI_XMPP_PASSWORD=b872dbe76f4f431f5e6cf9dfdf41bc28
+
+```
